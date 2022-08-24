@@ -421,10 +421,10 @@ install: $(INSTALL_BINDIR)vpnserver $(INSTALL_BINDIR)vpnbridge $(INSTALL_BINDIR)
 	@echo "--------------------------------------------------------------------"
 	@echo "Installation completed successfully."
 	@echo
-	@echo "Execute 'vpnserver start' to run the SoftEther VPN Server background service."
-	@echo "Execute 'vpnbridge start' to run the SoftEther VPN Bridge background service."
-	@echo "Execute 'vpnclient start' to run the SoftEther VPN Client background service."
-	@echo "Execute 'vpncmd' to run SoftEther VPN Command-Line Utility to configure VPN Server, VPN Bridge or VPN Client."
+	@echo "Execute 'vpnserver start' to run the GlobalNet Server background service."
+	@echo "Execute 'vpnbridge start' to run the GlobalNet Bridge background service."
+	@echo "Execute 'vpnclient start' to run the GlobalNet Client background service."
+	@echo "Execute 'vpncmd' to run GlobalNet Command-Line Utility to configure VPN Server, VPN Bridge or VPN Client."
 	@echo "--------------------------------------------------------------------"
 	@echo
 

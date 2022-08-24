@@ -107,7 +107,7 @@
 static char *delete_targets[] =
 {
 	"backup.vpn_bridge.config",
-	"backup.vpn_client.config",
+	// "backup.vpn_client.config",
 	"backup.vpn_server.config",
 	"backup.vpn_gate_svc.config",
 	"backup.etherlogger.config",

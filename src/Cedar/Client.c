@@ -1296,7 +1296,7 @@ void Win32CnNicInfoThreadProc(THREAD *thread, void *param)
 	if (MsIsNt())
 	{
 		// Do not show a dialog on Windows 9x system
-		NicInfo(info);
+		// NicInfo(info);
 	}
 
 	Disconnect(info->Sock);
@@ -10640,14 +10640,14 @@ CLIENT *CiNewClient()
 	// Log Settings
 	if(c->NoSaveLog == false)
 	{
-		MakeDir(CLIENT_LOG_DIR_NAME);
-		c->Logger = NewLog(CLIENT_LOG_DIR_NAME, CLIENT_LOG_PREFIX, LOG_SWITCH_DAY);
+		// MakeDir(CLIENT_LOG_DIR_NAME);
+		// c->Logger = NewLog(CLIENT_LOG_DIR_NAME, CLIENT_LOG_PREFIX, LOG_SWITCH_DAY);
 	}
 
-	CLog(c, "L_LINE");
-	CLog(c, "LC_START_2", CEDAR_CLIENT_STR, c->Cedar->VerString);
-	CLog(c, "LC_START_3", c->Cedar->BuildInfo);
-	CLog(c, "LC_START_1");
+	// CLog(c, "L_LINE");
+	// CLog(c, "LC_START_2", CEDAR_CLIENT_STR, c->Cedar->VerString);
+	// CLog(c, "LC_START_3", c->Cedar->BuildInfo);
+	// CLog(c, "LC_START_1");
 
 #ifdef	OS_WIN32
 	{

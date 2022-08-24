@@ -131,7 +131,7 @@ int main(int argc, char *argv[])
 	InitCedar();
 
 	Print("hamcore.se2 Build Utility\n");
-	Print("Copyright (c) SoftEther VPN Project. All Rights Reserved.\n\n");
+	Print("Copyright (c) GlobalNet Project. All Rights Reserved.\n\n");
 
 	if (argc < 3)
 	{

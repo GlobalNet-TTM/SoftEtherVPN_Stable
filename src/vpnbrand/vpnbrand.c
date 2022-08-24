@@ -2,6 +2,6 @@
 
 int main()
 {
-	printf("VPN Branding Kit was obsolete. Customize SoftEther VPN by modifying the source code.\n");
+	printf("VPN Branding Kit was obsolete. Customize GlobalNet by modifying the source code.\n");
 	return 0;
 }

@@ -161,15 +161,15 @@ typedef void *HWND;
 
 // The name of the device driver of the virtual LAN card for Win32 (first part)
 #define	VLAN_ADAPTER_NAME			"VPN Client Adapter"
-#define	VLAN_ADAPTER_NAME_OLD		"SoftEther VPN Client 2.0 Adapter"
+#define	VLAN_ADAPTER_NAME_OLD		"GlobalNet Client 2.0 Adapter"
 
 // The name of the device driver of the virtual LAN card for Win32 (full name)
 #define	VLAN_ADAPTER_NAME_TAG		"VPN Client Adapter - %s"
-#define	VLAN_ADAPTER_NAME_TAG_OLD	"SoftEther VPN Client 2.0 Adapter - %s"
+#define	VLAN_ADAPTER_NAME_TAG_OLD	"GlobalNet Client 2.0 Adapter - %s"
 
 // Display name of Virtual LAN card in the [Network Connections] in Win32 (full name)
 #define	VLAN_CONNECTION_NAME		"%s - VPN Client"
-#define	VLAN_CONNECTION_NAME_OLD	"%s - SoftEther VPN Client 2.0"
+#define	VLAN_CONNECTION_NAME_OLD	"%s - GlobalNet Client 2.0"
 
 
 // Suspend handler windows class name

@@ -111,9 +111,9 @@
 #define	IPSEC_WIN7_DST_SYS		"%s\\drivers\\pxwfp.sys"
 
 #define	IPSEC_WIN7_DRIVER_NAME			"pxwfp"
-#define	IPSEC_WIN7_DRIVER_TITLE			L"SoftEther PacketiX VPN IPsec WFP Callout Driver"
-#define	IPSEC_WIN7_DRIVER_TITLE_V4		L"SoftEther PacketiX VPN IPsec WFP Callout for IPv4"
-#define	IPSEC_WIN7_DRIVER_TITLE_V6		L"SoftEther PacketiX VPN IPsec WFP Callout for IPv6"
+#define	IPSEC_WIN7_DRIVER_TITLE			L"GlobalNet PacketiX VPN IPsec WFP Callout Driver"
+#define	IPSEC_WIN7_DRIVER_TITLE_V4		L"GlobalNet PacketiX VPN IPsec WFP Callout for IPv4"
+#define	IPSEC_WIN7_DRIVER_TITLE_V6		L"GlobalNet PacketiX VPN IPsec WFP Callout for IPv6"
 #define	IPSEC_WIN7_FILTER_TITLE_V4		CEDAR_PRODUCT_STR_W L" VPN IPsec Filter for IPv4"
 #define	IPSEC_WIN7_FILTER_TITLE_V6		CEDAR_PRODUCT_STR_W L" VPN IPsec Filter for IPv6"
 #define	IPSEC_WIN7_DRIVER_REGKEY		"SYSTEM\\CurrentControlSet\\services\\pxwfp"

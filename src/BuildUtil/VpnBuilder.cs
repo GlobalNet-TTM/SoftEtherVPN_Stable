@@ -319,7 +319,7 @@ namespace BuildUtil
 		public static readonly string VPN4SolutionFileName = Path.Combine(BaseDirName, "SEVPN.sln");
 		public static readonly string DebugSnapshotBaseDir = IO.NormalizePath(Path.Combine(BaseDirName, @"..\output\debug"));
 		public static readonly string ReleaseDestDir = IO.NormalizePath(Path.Combine(BaseDirName, @"..\output\pkg"));
-		public const string Prefix = "softether_open-";
+		public const string Prefix = "globalnet_open-"; // TODO: Change this will change installer file name?
 #endif
 #endif
 

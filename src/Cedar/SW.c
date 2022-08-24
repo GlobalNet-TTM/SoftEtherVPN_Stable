@@ -1707,11 +1707,14 @@ UINT SwFinish(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard,
 		}
 		else
 		{
-			SetText(hWnd, B_RUN, sw->CurrentComponent->StartDescription);
-			Show(hWnd, B_RUN);
-			Format(tmp, sizeof(tmp), "UI_NoCheck_%s_%u", sw->CurrentComponent->Name, sw->IsSystemMode);
-			Check(hWnd, B_RUN, !MsRegReadInt(REG_CURRENT_USER, SW_REG_KEY, tmp));
-			sw->Run = IsChecked(hWnd, B_RUN);
+			Hide(hWnd, B_RUN);
+			sw->Run = false;
+			// SetText(hWnd, B_RUN, sw->CurrentComponent->StartDescription);
+			// Show(hWnd, B_RUN);
+			// Format(tmp, sizeof(tmp), "UI_NoCheck_%s_%u", sw->CurrentComponent->Name, sw->IsSystemMode);
+			// // Check(hWnd, B_RUN, !MsRegReadInt(REG_CURRENT_USER, SW_REG_KEY, tmp));
+			// // sw->Run = IsChecked(hWnd, B_RUN);
+			// sw->Run = false;
 		}
 		break;
 
@@ -1736,9 +1739,10 @@ UINT SwFinish(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard,
 			}
 			else
 			{
-				Format(tmp, sizeof(tmp), "UI_NoCheck_%s_%u", sw->CurrentComponent->Name, sw->IsSystemMode);
-				sw->Run = IsChecked(hWnd, B_RUN);
-				MsRegWriteInt(REG_CURRENT_USER, SW_REG_KEY, tmp, !sw->Run);
+				// Format(tmp, sizeof(tmp), "UI_NoCheck_%s_%u", sw->CurrentComponent->Name, sw->IsSystemMode);
+				// // sw->Run = IsChecked(hWnd, B_RUN);
+				// sw->Run = false;
+				// MsRegWriteInt(REG_CURRENT_USER, SW_REG_KEY, tmp, !sw->Run);
 			}
 			break;
 		}
@@ -2068,6 +2072,9 @@ bool SwUninstallMain(SW *sw, WIZARD_PAGE *wp, SW_COMPONENT *c)
 	bool x64 = MsIs64BitWindows();
 	bool ok;
 	wchar_t tmp[MAX_SIZE];
+	wchar_t test_file[MAX_SIZE];
+	wchar_t test_file1[MAX_SIZE];
+	wchar_t test_file2[MAX_SIZE];
 	UINT i;
 	// Validate arguments
 	if (sw == NULL || wp == NULL || c == NULL)
@@ -2316,6 +2323,7 @@ LABEL_RETRY_4:
 	for (i = 0;i < LIST_NUM(sw->LogFile->LogList);i++)
 	{
 		SW_LOG *g = LIST_DATA(sw->LogFile->LogList, LIST_NUM(sw->LogFile->LogList) - i - 1);
+		// SW_LOG *g = LIST_DATA(sw->LogFile->LogList, i);
 		char tmpa[MAX_SIZE];
 
 		UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_DELETE"), g->Path);
@@ -2340,6 +2348,26 @@ LABEL_RETRY_4:
 			break;
 		}
 	}
+
+	// wchar_t test_file[MAX_PATH];
+
+	CombinePathW(test_file, sizeof(test_file), sw->InstallDir, L"lang.config");
+	UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_DELETE"), test_file);
+	SwPerformPrint(wp, tmp);
+	SleepThread(1000);
+	FileDeleteW(test_file);
+
+	CombinePathW(test_file1, sizeof(test_file1), sw->InstallDir, L"vpn_client.config");
+	UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_DELETE"), test_file1);
+	SwPerformPrint(wp, tmp);
+	SleepThread(1000);
+	FileDeleteW(test_file1);
+
+	CombinePathW(test_file2, sizeof(test_file2), sw->InstallDir, L"test");
+	UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_DELETE"), test_file2);
+	SwPerformPrint(wp, tmp);
+	SleepThread(1000);
+	DeleteDirW(test_file2);
 
 	// Remove the installed build number from the registry
 	if (true)
@@ -2670,8 +2698,8 @@ void SwDefineTasks(SW *sw, SW_TASK *t, SW_COMPONENT *c)
 		SW_TASK_COPY *vpninstall;
 		wchar_t *src_config_filename;
 
-		CombinePathW(tmp, sizeof(tmp), sw->InstallDir, L"backup.vpn_client.config");
-		Add(t->SetSecurityPaths, CopyUniStr(tmp));
+		// CombinePathW(tmp, sizeof(tmp), sw->InstallDir, L"backup.vpn_client.config");
+		// Add(t->SetSecurityPaths, CopyUniStr(tmp));
 
 		if (x64 == false)
 		{
@@ -2733,9 +2761,9 @@ void SwDefineTasks(SW *sw, SW_TASK *t, SW_COMPONENT *c)
 
 		src_config_filename = L"|empty.config";
 
-		Add(t->CopyTasks, (ct = SwNewCopyTask(src_config_filename, L"vpn_client.config", sw->InstallSrc, sw->InstallDir, false, false)));
+		// Add(t->CopyTasks, (ct = SwNewCopyTask(src_config_filename, L"vpn_client.config", sw->InstallSrc, sw->InstallDir, false, false)));
 
-		Add(t->CopyTasks, SwNewCopyTask(L"|backup_dir_readme.txt", L"readme.txt", sw->InstallSrc, tmp, false, false));
+		// Add(t->CopyTasks, SwNewCopyTask(L"|backup_dir_readme.txt", L"readme.txt", sw->InstallSrc, tmp, false, false));
 
 		CombinePathW(tmp, sizeof(tmp), ct->DstDir, ct->DstFileName);
 		Add(t->SetSecurityPaths, CopyUniStr(tmp));
@@ -3715,7 +3743,7 @@ LABEL_RETRY_5:
 LABEL_CREATE_SHORTCUT:
 
 	// Create a shortcut
-	SwInstallShortcuts(sw, wp, c, t);
+	// SwInstallShortcuts(sw, wp, c, t);
 
 	if (sw->LanguageMode)
 	{
@@ -3869,7 +3897,7 @@ LABEL_REGISTER_UNINSTALL:
 		CombinePathW(dst_setup_exe, sizeof(dst_setup_exe), sw->InstallDir, L"vpnsetup.exe");
 
 		Format(uninstall_keyname, sizeof(uninstall_keyname),
-			"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\softether_" GC_SW_SOFTETHER_PREFIX "%s", c->Name);
+			"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\globalnet_" GC_SW_SOFTETHER_PREFIX "%s", c->Name);
 		StrToUni(uninstall_keyname_w, sizeof(uninstall_keyname_w), uninstall_keyname);
 
 		GetCedarVersion(uninstall_version, sizeof(uninstall_version));
@@ -4024,6 +4052,899 @@ LABEL_CLEANUP:
 
 	return ret;
 }
+// bool SwInstallMain(SW *sw, SW_COMPONENT *c)
+// {
+// 	SW_TASK *t;
+// 	bool ret = false;
+// 	UINT i;
+// 	wchar_t tmp[MAX_SIZE * 2];
+// 	bool ok;
+// 	bool x64 = MsIs64BitWindows();
+// 	// Validate arguments
+// 	// if (sw == NULL || wp == NULL || c == NULL)
+// 	// {
+// 	// 	return false;
+// 	// }
+
+// 	ok = true;
+// 	t = NULL;
+
+// 	// Create a Setup task
+// 	// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_INIT_TASKS"));
+// 	t = SwNewTask();
+
+// 	// Create a list of files to be installed
+// 	SwDefineTasks(sw, t, c);
+
+// 	if (sw->LanguageMode)
+// 	{
+// 		goto LABEL_CREATE_SHORTCUT;
+// 	}
+
+// 	if (sw->OnlyAutoSettingMode)
+// 	{
+// 		goto LABEL_IMPORT_SETTING;
+// 	}
+
+// 	// Install the SeLow
+// 	if (SuIsSupportedOs(true))
+// 	{
+// 		// Only in the system mode
+// 		if (c->InstallService && sw->IsSystemMode)
+// 		{
+// 			// Not to install in the case of the VPN Client
+// 			bool install_su = false;
+
+// 			if (c->Id != SW_CMP_VPN_CLIENT)
+// 			{
+// 				install_su = true;
+// 			}
+
+
+// 			if (install_su)
+// 			{
+// 				bool ret;
+
+// 				// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_INSTALL_SELOW"));
+// 				ret = SuInstallDriver(false);
+
+// 				if (ret == false)
+// 				{
+// 					if (MsIs64BitWindows() && MsIsWindows10())
+// 					{
+// 						void *proc_handle = NULL;
+// 						wchar_t exe[MAX_PATH];
+
+// 						CombinePathW(exe, sizeof(exe), MsGetExeDirNameW(), L"vpnsetup_x64.exe");
+
+// 						if (MsExecuteEx2W(exe, L"/SUINSTMODE:yes", &proc_handle, true))
+// 						{
+// 							if (proc_handle != NULL)
+// 							{
+// 								MsWaitProcessExit(proc_handle);
+// 							}
+// 						}
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	// Uninstall the old MSI
+// 	ok = true;
+// 	if (sw->IsSystemMode && c->OldMsiList != NULL)
+// 	{
+// 		// bool reboot_required = false;
+
+// 		// if (SwUninstallOldMsiInstalled(wp->Wizard->hWndWizard, wp, c, &reboot_required) == false)
+// 		// {
+// 		// 	// MSI uninstall Failed
+// 		// 	ok = false;
+// 		// }
+// 		// else if (reboot_required)
+// 		// {
+// 		// 	// Require to restart
+// 		// 	ok = false;
+
+// 		// 	sw->MsiRebootRequired = true;
+// 		// }
+// 	}
+
+// 	if (ok == false)
+// 	{
+// 		goto LABEL_CLEANUP;
+// 	}
+
+// 	// Stop the Service
+// 	ok = true;
+
+// 	if (c->InstallService)
+// 	{
+// 		char svc_title_name[MAX_SIZE];
+// 		wchar_t *svc_title;
+
+// 		Format(svc_title_name, sizeof(svc_title_name), "SVC_%s_TITLE", c->SvcName);
+
+// 		svc_title = _UU(svc_title_name);
+
+// 		if (UniIsEmptyStr(svc_title) == false)
+// 		{
+// 			if (sw->IsSystemMode && MsIsNt())
+// 			{
+// 				// WinNT and system mode
+// 				if (MsIsServiceRunning(c->SvcName))
+// 				{
+// 					wchar_t svc_exe[MAX_SIZE];
+// 					UINT64 giveup_tick;
+// 					UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_STOP_SVC"), svc_title);
+// 					// SwPerformPrint(wp, tmp);
+
+// LABEL_RETRY_3:
+// 					if (MsStopService(c->SvcName) == false)
+// 					{
+// 						// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_STOP_SVC_ERROR"), svc_title, c->SvcName);
+// 						// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 						// {
+// 						// 	// Cancel
+// 						// 	ok = false;
+// 						// }
+// 						// else
+// 						// {
+// 						// 	if (MsIsServiceRunning(c->SvcName))
+// 						// 	{
+// 						// 		goto LABEL_RETRY_3;
+// 						// 	}
+// 						// }
+// 					}
+
+// 					// Wait for 5 seconds if stopped the service
+// 					SleepThread(5000);
+
+// 					// Wait until the EXE file for the service become ready to write
+// 					ConbinePathW(svc_exe, sizeof(svc_exe), sw->InstallDir, c->SvcFileName);
+
+// 					giveup_tick = Tick64() + (UINT64)10000;
+// 					while (IsFileWriteLockedW(svc_exe))
+// 					{
+// 						UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_WAIT_FOR_FILE_UNLOCK"), svc_exe);
+// 						// SwPerformPrint(wp, tmp);
+
+// 						SleepThread(100);
+
+// 						if (Tick64() >= giveup_tick)
+// 						{
+// 							break;
+// 						}
+// 					}
+// 				}
+// 			}
+// 			else
+// 			{
+// 				// In the case of Win9x or user mode
+// 				wchar_t svc_exe[MAX_SIZE];
+// 				UINT64 giveup_tick;
+
+// 				// Stop the Service
+// 				MsStopUserModeSvc(c->SvcName);
+// 				SleepThread(3000);
+
+// 				// Wait until the EXE file for the service become ready to write
+// 				ConbinePathW(svc_exe, sizeof(svc_exe), sw->InstallDir, c->SvcFileName);
+
+// 				giveup_tick = Tick64() + (UINT64)10000;
+// 				while (IsFileWriteLockedW(svc_exe))
+// 				{
+// 					UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_WAIT_FOR_FILE_UNLOCK"), svc_exe);
+// 					// SwPerformPrint(wp, tmp);
+
+// 					SleepThread(100);
+
+// 					if (Tick64() >= giveup_tick)
+// 					{
+// 						break;
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	if (ok == false)
+// 	{
+// 		goto LABEL_CLEANUP;
+// 	}
+
+// 	// Examine preliminary whether files to be copied are writable successfully
+// 	ok = true;
+
+// 	// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_COPY_PREPARE"));
+
+// 	for (i = 0;i < LIST_NUM(t->CopyTasks);i++)
+// 	{
+// 		SW_TASK_COPY *ct = LIST_DATA(t->CopyTasks, i);
+
+// 		wchar_t fullpath[MAX_SIZE];
+// 		IO *io;
+// 		bool write_ok;
+// 		bool new_file;
+// 		bool new_dir;
+// 		UINT64 giveup_tick = Tick64() + 30000ULL;
+
+// LABEL_RETRY_1:
+// 		new_dir = write_ok = new_file = false;
+
+// 		CombinePathW(fullpath, sizeof(fullpath), ct->DstDir, ct->DstFileName);
+
+// 		if (ct->Overwrite == false)
+// 		{
+// 			// Do not check if overwrite is Off
+// 			continue;
+// 		}
+
+// 		// If the process with the same name is running, kill it
+// 		if (MsKillProcessByExeName(fullpath) != 0)
+// 		{
+// 			// Wait for 1 second if killed the process
+// 			SleepThread(1000);
+// 		}
+
+// 		new_dir = MakeDirExW(ct->DstDir);
+
+// 		// Write check
+// 		io = FileOpenExW(fullpath, true, true);
+// 		if (io == NULL)
+// 		{
+// 			io = FileCreateW(fullpath);
+// 			new_file = true;
+// 		}
+// 		if (io != NULL)
+// 		{
+// 			// Writing OK
+// 			write_ok = true;
+
+// 			FileCloseEx(io, true);
+
+// 			if (new_file)
+// 			{
+// 				FileDeleteW(fullpath);
+// 			}
+// 		}
+
+// 		if (new_dir)
+// 		{
+// 			DeleteDirW(ct->DstDir);
+// 		}
+
+// 		if (write_ok == false)
+// 		{
+// 			UINT64 now = Tick64();
+
+// 			if (now <= giveup_tick)
+// 			{
+// 				// Do the auto-retry in 30 seconds
+// 				SleepThread(1000);
+// 				goto LABEL_RETRY_1;
+// 			}
+
+// 			// Show an error message if it fails
+// 			UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_WRITE_ERROR"), fullpath, c->Title);
+// 			// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 			// {
+// 			// 	// Cancel
+// 			// 	ok = false;
+// 			// 	break;
+// 			// }
+// 			// else
+// 			// {
+// 			// 	// Retry
+// 			// 	goto LABEL_RETRY_1;
+// 			// }
+// 		}
+// 	}
+
+// 	if (ok == false)
+// 	{
+// 		goto LABEL_CLEANUP;
+// 	}
+
+// 	// File Copy
+// 	ok = true;
+
+// 	for (i = 0;i < LIST_NUM(t->CopyTasks);i++)
+// 	{
+// 		SW_TASK_COPY *ct = LIST_DATA(t->CopyTasks, i);
+// 		wchar_t fullpath_src[MAX_SIZE];
+// 		wchar_t fullpath_dst[MAX_SIZE];
+// 		bool skip;
+
+// LABEL_RETRY_2:
+
+// 		if (UniStartWith(ct->SrcFileName, L"|") == false)
+// 		{
+// 			CombinePathW(fullpath_src, sizeof(fullpath_src), ct->SrcDir, ct->SrcFileName);
+// 		}
+// 		else
+// 		{
+// 			UniStrCpy(fullpath_src, sizeof(fullpath_src), ct->SrcFileName);
+// 		}
+
+// 		CombinePathW(fullpath_dst, sizeof(fullpath_dst), ct->DstDir, ct->DstFileName);
+
+// 		UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_COPY_FILE"), fullpath_dst);
+// 		// SwPerformPrint(wp, tmp);
+
+// 		skip = false;
+
+// 		if (ct->Overwrite == false)
+// 		{
+// 			if (IsFileExistsW(fullpath_dst))
+// 			{
+// 				// Do nothing because the destination file already exists
+// 				skip = true;
+// 			}
+// 		}
+
+// 		if (skip == false)
+// 		{
+// 			// Create a directory
+// 			if (MakeDirExW(ct->DstDir))
+// 			{
+// 				SwAddLog(sw, sw->LogFile, SW_LOG_TYPE_DIR, ct->DstDir);
+// 			}
+
+// 			// Copy
+// 			if (FileCopyW(fullpath_src, fullpath_dst) == false && ct->Overwrite)
+// 			{
+// 				// Show an error message if it fails
+// 				// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_COPY_ERROR"), fullpath_dst);
+// 				// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 				// {
+// 				// 	// Cancel
+// 				// 	ok = false;
+// 				// 	break;
+// 				// }
+// 				// else
+// 				// {
+// 				// 	// Retry
+// 				// 	goto LABEL_RETRY_2;
+// 				// }
+// 			}
+// 			else
+// 			{
+// 				if (ct->Overwrite && ct->SetupFile == false)
+// 				{
+// 					SwAddLog(sw, sw->LogFile, SW_LOG_TYPE_FILE, fullpath_dst);
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	if (ok == false)
+// 	{
+// 		goto LABEL_CLEANUP;
+// 	}
+
+
+// 	if (sw->IsSystemMode && MsIsNt())
+// 	{
+// 		// ACL settings only in the system mode
+// 		for (i = 0;i < LIST_NUM(t->SetSecurityPaths);i++)
+// 		{
+// 			// Security Settings
+// 			wchar_t *path = LIST_DATA(t->SetSecurityPaths, i);
+
+// 			UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_SET_SECURITY"), path);
+// 			// SwPerformPrint(wp, tmp);
+
+// 			MsSetFileSecureAcl(path);
+// 		}
+// 	}
+
+// 	// Set the language of the destination
+// 	if (true)
+// 	{
+// 		LANGLIST current_lang;
+// 		wchar_t langfilename[MAX_PATH];
+
+// 		Zero(&current_lang, sizeof(current_lang));
+// 		GetCurrentLang(&current_lang);
+
+// 		ConbinePathW(langfilename, sizeof(langfilename), sw->InstallDir, L"lang.config");
+
+// 		SaveLangConfig(langfilename, current_lang.Name);
+// 	}
+
+// 	// Firewall registration
+// 	if (true)
+// 	{
+// 		char dira[MAX_PATH];
+
+// 		UniToStr(dira, sizeof(dira), sw->InstallDir);
+
+// 		RegistWindowsFirewallAllEx(dira);
+// 	}
+
+// 	if (c->Id == SW_CMP_VPN_SERVER || c->Id == SW_CMP_VPN_BRIDGE)
+// 	{
+// 		// Disable the off-loading
+// 		MsDisableNetworkOffloadingEtc();
+// 	}
+
+// 	// Install the service
+// 	ok = true;
+
+// 	if (c->InstallService)
+// 	{
+// 		char svc_title_name[MAX_SIZE];
+// 		char svc_description_name[MAX_SIZE];
+// 		wchar_t *svc_title;
+
+// 		Format(svc_title_name, sizeof(svc_title_name), "SVC_%s_TITLE", c->SvcName);
+// 		Format(svc_description_name, sizeof(svc_description_name), "SVC_%s_DESCRIPT", c->SvcName);
+
+// 		svc_title = _UU(svc_title_name);
+
+// 		if (UniIsEmptyStr(svc_title) == false)
+// 		{
+// 			if (sw->IsSystemMode == false || MsIsNt() == false)
+// 			{
+// 				// Just simply start in user mode or Win9x mode
+// 				wchar_t fullpath[MAX_SIZE];
+
+// LABEL_RETRY_USERMODE_EXEC:
+
+// 				CombinePathW(fullpath, sizeof(fullpath), sw->InstallDir, c->SvcFileName);
+
+// 				if (MsExecuteW(fullpath, (MsIsNt() ? L"/usermode" : L"/win9x_service")) == false)
+// 				{
+// 					// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_SVC_USERMODE_EXEC_FAILED"), fullpath);
+
+// 					// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 					// {
+// 					// 	// Cancel
+// 					// 	ok = false;
+// 					// }
+// 					// else
+// 					// {
+// 					// 	// Retry
+// 					// 	goto LABEL_RETRY_USERMODE_EXEC;
+// 					// }
+// 				}
+// 				else
+// 				{
+// 					if (MsIsNt() == false)
+// 					{
+// 						// Register into the registry as a background service in the case of Win9x
+// 						wchar_t fullpath2[MAX_SIZE];
+
+// 						UniFormat(fullpath2, sizeof(fullpath2), L"\"%s\" /win9x_service", fullpath);
+
+// 						MsRegWriteStrW(REG_LOCAL_MACHINE, WIN9X_SVC_REGKEY_1, c->SvcName, fullpath2);
+// 						MsRegWriteStrW(REG_LOCAL_MACHINE, WIN9X_SVC_REGKEY_2, c->SvcName, fullpath2);
+// 					}
+// 				}
+// 			}
+// 			else
+// 			{
+// 				// System mode
+// 				UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_INSTALL_SVC"), svc_title);
+// 				// SwPerformPrint(wp, tmp);
+
+// LABEL_RETRY_4:
+
+// 				if (MsIsServiceInstalled(c->SvcName))
+// 				{
+// 					// Stop the service if it is running by any chance
+// 					MsStopService(c->SvcName);
+// 				}
+
+// 				if (MsIsServiceInstalled(c->SvcName))
+// 				{
+// 					// Uninstall the old service
+// 					if (MsUninstallService(c->SvcName) == false)
+// 					{
+// 						// Show an error message if it fails
+// 						// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_SVC_UNINSTALL_FAILED"), svc_title, c->SvcName);
+// 						// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 						// {
+// 						// 	// Cancel
+// 						// 	ok = false;
+// 						// }
+// 						// else
+// 						// {
+// 						// 	// Retry
+// 						// 	goto LABEL_RETRY_4;
+// 						// }
+// 					}
+// 				}
+
+// 				if (ok)
+// 				{
+// 					wchar_t fullpath[MAX_SIZE];
+// 					wchar_t fullpath2[MAX_SIZE];
+
+// 					CombinePathW(fullpath2, sizeof(fullpath), sw->InstallDir, c->SvcFileName);
+// 					UniFormat(fullpath, sizeof(fullpath), L"\"%s\" /service", fullpath2);
+
+// 					// Install a new service
+// 					if (MsInstallServiceW(c->SvcName, svc_title, _UU(svc_description_name), fullpath) == false)
+// 					{
+// 						// Show the error message if it fails
+// 						// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_SVC_INSTALL_FAILED"), svc_title, c->SvcName);
+// 						// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 						// {
+// 						// 	// Cancel
+// 						// 	ok = false;
+// 						// }
+// 						// else
+// 						// {
+// 						// 	// Retry
+// 						// 	goto LABEL_RETRY_4;
+// 						// }
+// 					}
+// 					else
+// 					{
+// 						wchar_t wtmp[256];
+
+// 						StrToUni(wtmp, sizeof(wtmp), c->SvcName);
+// 						SwAddLog(sw, sw->LogFile, SW_LOG_TYPE_SVC, wtmp);
+// 					}
+// 				}
+
+// 				if (ok)
+// 				{
+// 					UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_START_SVC"), svc_title);
+// 					// SwPerformPrint(wp, tmp);
+
+// 					MsRegWriteIntEx2(REG_LOCAL_MACHINE, "Software\\" GC_REG_COMPANY_NAME "\\Update Service Config", c->SvcName, 0, false, true);
+
+// LABEL_RETRY_5:
+// 					// Start the service
+// 					if (MsStartService(c->SvcName) == false)
+// 					{
+// 						// Show the error message if it fails
+// 						// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_START_SVC_ERROR"), svc_title, c->SvcName);
+// 						// if (SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_RETRYCANCEL, tmp) != IDRETRY)
+// 						// {
+// 						// 	// Cancel
+// 						// 	ok = false;
+// 						// }
+// 						// else
+// 						// {
+// 						// 	// Retry
+// 						// 	if (MsIsServiceRunning(c->SvcName) == false)
+// 						// 	{
+// 						// 		goto LABEL_RETRY_5;
+// 						// 	}
+// 						// }
+// 					}
+// 				}
+// 			}
+
+// 			if (c->Id == SW_CMP_VPN_CLIENT)
+// 			{
+// 				// In the VPN Client service, wait until the service port can be connected
+// 				SwWaitForVpnClientPortReady(SW_VPNCLIENT_SERVICE_WAIT_READY_TIMEOUT);
+// 			}
+// 		}
+// 	}
+
+// 	if (ok == false)
+// 	{
+// 		goto LABEL_CLEANUP;
+// 	}
+
+// LABEL_CREATE_SHORTCUT:
+
+// 	// Create a shortcut
+// 	// SwInstallShortcuts(sw, wp, c, t);
+
+// 	if (sw->LanguageMode)
+// 	{
+// 		// Update the Description of the service if in the language setting mode
+// 		if (c->InstallService)
+// 		{
+// 			char svc_description_name[MAX_SIZE];
+// 			wchar_t *svc_description;
+
+// 			Format(svc_description_name, sizeof(svc_description_name), "SVC_%s_DESCRIPT", c->SvcName);
+
+// 			svc_description = _UU(svc_description_name);
+
+// 			if (UniIsEmptyStr(svc_description) == false)
+// 			{
+// 				if (sw->IsSystemMode && MsIsNt())
+// 				{
+// 					MsSetServiceDescription(c->SvcName, svc_description);
+// 				}
+// 			}
+// 		}
+
+// 		goto LABEL_REGISTER_UNINSTALL;
+// 	}
+
+// 	if (c->Id == SW_CMP_VPN_CLIENT)
+// 	{
+// 		// Register the UI Helper in the Run in the case of the VPN Client
+// 		wchar_t fullpath[MAX_PATH];
+// 		wchar_t fullcmd[MAX_SIZE];
+
+// 		ConbinePathW(fullpath, sizeof(fullpath), sw->InstallDir, c->SvcFileName);
+
+// 		UniFormat(fullcmd, sizeof(fullcmd), L"\"%s\" /uihelp", fullpath);
+
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+// 			SW_VPN_CLIENT_UIHELPER_REGVALUE, fullcmd, false, true);
+
+// 		// Start the UI Helper
+// 		MsExecuteW(fullpath, L"/uihelp");
+
+// 		SleepThread(3000);
+// 	}
+
+// 	if (true)
+// 	{
+// 		// Run the vpncmd and exit immediately
+// 		wchar_t fullpath[MAX_PATH];
+
+// 		ConbinePathW(fullpath, sizeof(fullpath), sw->InstallDir, (MsIsX64() ? L"vpncmd_x64.exe" : L"vpncmd.exe"));
+
+// 		RunW(fullpath, L"/?", true, false);
+// 	}
+
+// 	if (c->Id == SW_CMP_VPN_CLIENT)
+// 	{
+// 		wchar_t dst_vpnclient_exe[MAX_PATH];
+// 		wchar_t vpnclient_arg[MAX_SIZE];
+
+// 		ConbinePathW(dst_vpnclient_exe, sizeof(dst_vpnclient_exe), sw->InstallDir, c->SvcFileName);
+// 		UniFormat(vpnclient_arg, sizeof(vpnclient_arg), L"\"%s\" \"%%1\"", dst_vpnclient_exe);
+
+// 		// Register the association to .vpn file in the case of VPN Client
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, SW_VPN_CLIENT_EXT_REGKEY, NULL, SW_VPN_CLIENT_EXT_REGVALUE, false, true);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_EXT_REGKEY);
+
+// 		MsRegNewKeyEx2(REG_LOCAL_MACHINE, SW_VPN_CLIENT_EXT_REGKEY_SUB1, false, true);
+// 		MsRegNewKeyEx2(REG_LOCAL_MACHINE, SW_VPN_CLIENT_EXT_REGKEY_SUB2, false, true);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_EXT_REGKEY_SUB1);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_EXT_REGKEY_SUB2);
+
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, SW_VPN_CLIENT_VPNFILE_REGKEY, NULL, SW_VPN_CLIENT_VPNFILE_REGVALUE, false, true);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_VPNFILE_REGKEY);
+
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, SW_VPN_CLIENT_VPNFILE_ICON_REGKEY, NULL, dst_vpnclient_exe, false, true);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_VPNFILE_ICON_REGKEY);
+
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, SW_VPN_CLIENT_VPNFILE_SHELLOPEN_CMD_REGKEY, NULL, vpnclient_arg, false, true);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_VPNFILE_SHELLOPEN_CMD_REGKEY_SUB2);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_VPNFILE_SHELLOPEN_CMD_REGKEY_SUB1);
+// 		SwAddLogA(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, SW_VPN_CLIENT_VPNFILE_SHELLOPEN_CMD_REGKEY);
+// 	}
+
+// 	if (c->Id == SW_CMP_VPN_CLIENT)
+// 	{
+// 		// Disable the MMCSS
+// 		MsSetMMCSSNetworkThrottlingEnable(false);
+// 	}
+
+// LABEL_IMPORT_SETTING:
+// 	if (c->Id == SW_CMP_VPN_CLIENT)
+// 	{
+// 		if (UniIsEmptyStr(sw->auto_setting_path) == false)
+// 		{
+// 			if (UniIsEmptyStr(sw->vpncmgr_path) == false)
+// 			{
+// 				if (sw->DisableAutoImport == false)
+// 				{
+// 					wchar_t tmp_setting_path[MAX_PATH];
+// 					wchar_t arg[MAX_PATH];
+// 					void *handle;
+// 					bool easy_mode = IsFileExists(SW_FLAG_EASY_MODE_2);
+// 					// Run the vpncmgr, and start a connection by importing the connection configuration file
+// 					// Store a connection setting file to stable temporally directory
+
+// 					// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_IMPORTING_ACCOUNT"));
+
+// 					ConbinePathW(tmp_setting_path, sizeof(tmp_setting_path), MsGetTempDirW(), L"vpn_auto_connect.vpn");
+// 					FileCopyW(sw->auto_setting_path, tmp_setting_path);
+
+// 					// Start the vpncmgr
+// 					UniFormat(arg, sizeof(arg), L"/%S \"%s\"", (easy_mode ? "easy" : "normal"), tmp_setting_path);
+// 					handle = MsRunAsUserExW(sw->vpncmgr_path, arg, false);
+
+// 					if (handle != NULL)
+// 					{
+// 						sw->HideStartCommand = true;
+
+// 						CloseHandle(handle);
+// 					}
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	if (sw->OnlyAutoSettingMode)
+// 	{
+// 		goto LABEL_FINISHED;
+// 	}
+
+// LABEL_REGISTER_UNINSTALL:
+// 	// Register the uninstall information
+// 	if (sw->IsSystemMode)
+// 	{
+// 		char uninstall_keyname[MAX_SIZE];
+// 		wchar_t uninstall_keyname_w[MAX_SIZE];
+// 		char uninstall_version[MAX_SIZE];
+// 		wchar_t dst_setup_exe[MAX_PATH];
+// 		wchar_t setup_icon[MAX_SIZE];
+// 		wchar_t uninstaller_exe[MAX_PATH];
+// 		SYSTEMTIME st;
+// 		char install_date[MAX_PATH];
+
+// 		// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_REGISTER_UNINSTALL"));
+
+// 		Zero(&st, sizeof(st));
+// 		LocalTime(&st);
+
+// 		Format(install_date, sizeof(install_date), "%04u/%02u/%02u", st.wYear, st.wMonth, st.wDay);
+
+// 		CombinePathW(dst_setup_exe, sizeof(dst_setup_exe), sw->InstallDir, L"vpnsetup.exe");
+
+// 		Format(uninstall_keyname, sizeof(uninstall_keyname),
+// 			"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\globalnet_" GC_SW_SOFTETHER_PREFIX "%s", c->Name);
+// 		StrToUni(uninstall_keyname_w, sizeof(uninstall_keyname_w), uninstall_keyname);
+
+// 		GetCedarVersion(uninstall_version, sizeof(uninstall_version));
+
+// 		// Display name
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, uninstall_keyname, "DisplayName", c->LongName,
+// 			false, true);
+
+// 		// Version
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, uninstall_keyname, "DisplayVersion", uninstall_version,
+// 			false, true);
+
+// 		// Icon
+// 		UniFormat(setup_icon, sizeof(setup_icon), L"\"%s\",%u", dst_setup_exe, c->IconExeIndex);
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, uninstall_keyname, "DisplayIcon", setup_icon,
+// 			false, true);
+
+// 		// Information
+// 		MsRegWriteIntEx2(REG_LOCAL_MACHINE, uninstall_keyname, "NoModify", 1, false, true);
+// 		MsRegWriteIntEx2(REG_LOCAL_MACHINE, uninstall_keyname, "NoRepair", 1, false, true);
+
+// 		// Link
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, uninstall_keyname, "HelpLink", _SS("SW_UNINSTALLINFO_URL"),
+// 			false, true);
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, uninstall_keyname, "URLInfoAbout", _SS("SW_UNINSTALLINFO_URL"),
+// 			false, true);
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, uninstall_keyname, "URLUpdateInfo", _SS("SW_UNINSTALLINFO_URL"),
+// 			false, true);
+
+// 		// Publisher
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, uninstall_keyname, "Publisher", _UU("SW_UNINSTALLINFO_PUBLISHER"),
+// 			false, true);
+
+// 		// Date of installation
+// 		MsRegWriteStrEx2(REG_LOCAL_MACHINE, uninstall_keyname, "InstallDate", install_date,
+// 			false, true);
+
+// 		// Uninstaller
+// 		UniFormat(uninstaller_exe, sizeof(uninstaller_exe), L"\"%s\"", dst_setup_exe);
+// 		MsRegWriteStrEx2W(REG_LOCAL_MACHINE, uninstall_keyname, "UninstallString", uninstaller_exe,
+// 			false, true);
+
+// 		if (sw->LanguageMode == false)
+// 		{
+// 			SwAddLog(sw, sw->LogFile, SW_LOG_TYPE_REGISTRY, uninstall_keyname_w);
+// 		}
+// 	}
+
+// 	// Write the log
+// 	if (true)
+// 	{
+// 		wchar_t log_filename[MAX_SIZE];
+
+// L_RETRY_LOG:
+
+// 		// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_WRITE_LOG"));
+
+// 		CombinePathW(log_filename, sizeof(log_filename), sw->InstallDir, L"setuplog.dat");
+
+// 		if (sw->LanguageMode == false)
+// 		{
+// 			SwAddLog(sw, sw->LogFile, SW_LOG_TYPE_FILE, log_filename);
+// 		}
+
+// 		sw->LogFile->IsSystemMode = sw->IsSystemMode;
+// 		sw->LogFile->Component = sw->CurrentComponent;
+// 		sw->LogFile->Build = CEDAR_BUILD;
+
+// 		if (SwSaveLogFile(sw, log_filename, sw->LogFile) == false)
+// 		{
+// 			// Show the error message if it fails
+// 			// UINT msgret;
+// 			// UniFormat(tmp, sizeof(tmp), _UU("SW_PERFORM_MSG_WRITE_LOG_ERROR"), log_filename);
+// 			// msgret = SwPerformMsgBox(wp, MB_ICONEXCLAMATION | MB_YESNO, tmp);
+
+// 			// if (msgret == IDYES)
+// 			// {
+// 			// 	// Retry
+// 			// 	goto L_RETRY_LOG;
+// 			// }
+// 		}
+// 	}
+
+// 	if (true)
+// 	{
+// 		// Record the installed build number and directory in the registry
+// 		char keyname[MAX_SIZE];
+// 		LANGLIST current_lang;
+// 		LANGLIST current_os_lang;
+
+// 		GetCurrentLang(&current_lang);
+// 		GetCurrentLang(&current_os_lang);
+
+// 		Format(keyname, sizeof(keyname), "%s\\%s", SW_REG_KEY, sw->CurrentComponent->Name);
+// 		MsRegWriteStrEx2W(sw->IsSystemMode ? REG_LOCAL_MACHINE : REG_CURRENT_USER,
+// 			keyname, "InstalledDir", sw->InstallDir, false, true);
+// 		MsRegWriteIntEx2(sw->IsSystemMode ? REG_LOCAL_MACHINE : REG_CURRENT_USER,
+// 			keyname, "InstalledBuild", CEDAR_BUILD, false, true);
+
+// 		// Set the language to registry
+// 		MsRegWriteStrEx2(REG_CURRENT_USER, SW_REG_KEY, "Last User Language",
+// 			current_lang.Name, false, true);
+// 		MsRegWriteStrEx2(REG_CURRENT_USER, SW_REG_KEY, "Last Operating System Language",
+// 			current_os_lang.Name, false, true);
+
+// 		// Save the EULA agreement record
+// 		if (sw->EulaAgreed && sw->CurrentEulaHash != 0)
+// 		{
+// 			MsRegWriteIntEx2(REG_CURRENT_USER, SW_REG_KEY_EULA, sw->CurrentComponent->Name,
+// 				sw->CurrentEulaHash, false, true);
+// 		}
+// 	}
+
+// 	// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_UPDATING"));
+
+// 	// Notify the update to the system
+// 	MsUpdateSystem();
+
+// 	if (sw->LanguageMode)
+// 	{
+// 		// Show a message that the language configuration is complete
+// 		wchar_t msg[MAX_SIZE];
+
+// 		UniFormat(msg, sizeof(msg), _UU("SW_LANG_OK"), c->Title, c->Title);
+
+// 		if (c->InstallService)
+// 		{
+// 			UniStrCat(msg, sizeof(msg), _UU("SW_LANG_OK_SERVICE"));
+// 		}
+
+// 		if (c->Id == SW_CMP_VPN_CLIENT)
+// 		{
+// 			UniStrCat(msg, sizeof(msg), _UU("SW_LANG_OK_VPNCMGR"));
+// 		}
+
+// 		UniStrCpy(sw->FinishMsg, sizeof(sw->FinishMsg), msg);
+// 	}
+
+// LABEL_FINISHED:
+
+// 	// Completion message
+// 	// SwPerformPrint(wp, _UU("SW_PERFORM_MSG_FINISHED"));
+
+// 	ret = true;
+
+// LABEL_CLEANUP:
+// 	// Release the task
+// 	if (t != NULL)
+// 	{
+// 		SwFreeTask(t);
+// 	}
+
+// 	return ret;
+// }
 
 // Wait for that the listening port of the VPN Client service becomes available
 bool SwWaitForVpnClientPortReady(UINT timeout)
@@ -4547,7 +5468,20 @@ UINT SwPerform(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard
 		// Close this screen since the process completed
 		if (wParam == 0xCAFE)
 		{
-			JumpWizard(wizard_page, (lParam == 0 ? D_SW_ERROR : D_SW_FINISH));
+			if (lParam == 0) 
+			{
+				JumpWizard(wizard_page, D_SW_ERROR);
+			} 
+			else 
+			{
+				CloseWizard(wizard_page);
+				// JumpWizard(NULL, D_SW_FINISH);
+				// wizard->CloseConfirmMsg = NULL;
+
+				// sw->ExitCode = 0;
+			}
+
+			// JumpWizard(wizard_page, (lParam == 0 ? D_SW_ERROR : D_SW_FINISH));
 
 			if (sw->PerformThread != NULL)
 			{
@@ -5247,6 +6181,55 @@ UINT SwEula(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard, W
 	switch (msg)
 	{
 	case WM_INITDIALOG:
+		if (IsFileExistsW(L"@install_src.dat") == false)
+		{
+			// Vpnsetup.exe is launched from other than the installation source
+			MsgBoxEx(hWnd, MB_ICONSTOP, _UU("SW_NOT_INSTALL_SRC"));
+			break;
+		}
+
+		// if (MsIsKB3033929RequiredAndMissing())
+		// {
+		// 	// KB3033929 is missing
+		// 	if (MsgBoxEx(hWnd, MB_ICONINFORMATION | MB_OKCANCEL, _UU("SW_KB3033929_REQUIRED")) == IDCANCEL)
+		// 	{
+		// 		break;
+		// 	}
+		// }
+
+		// if (MsIsAdmin() == false)
+		// {
+		// 	if (MsIsVista())
+		// 	{
+		// 		if (sw->IsReExecForUac == false)
+		// 		{
+		// 			// If there is no Admin privileges in Vista or later, attempt to acquire Admin rights by UAC first during the first run
+		// 			if (SwReExecMyself(sw, NULL, true))
+		// 			{
+		// 				// Terminate itself if it succeeds to start the child process
+		// 				CloseWizard(wizard_page);
+		// 				break;
+		// 			}
+		// 			else
+		// 			{
+		// 				// Jump to mode selection screen if it fails to start the
+		// 				// child process (including user presses the cancel of UAC)
+		// 				return D_SW_MODE;
+		// 			}
+		// 		}
+		// 		else
+		// 		{
+		// 			// Jump to mode selection screen when the user don't have Admin rights after being activated by UAC
+		// 			return D_SW_MODE;
+		// 		}
+		// 	}
+		// 	else
+		// 	{
+		// 		// Jump to the mode selection screen in the case of older than Vista
+		// 		return D_SW_MODE;
+		// 	}
+		// }
+
 		break;
 
 	case WM_WIZ_SHOW:
@@ -5303,7 +6286,9 @@ UINT SwEula(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard, W
 
 	case WM_WIZ_BACK:
 		sw->EulaAgreed = false;
-		return D_SW_COMPONENTS;
+		// Todo
+		// return D_SW_COMPONENTS;
+		return D_SW_WELCOME;
 
 	case WM_COMMAND:
 		switch (wParam)
@@ -5336,24 +6321,28 @@ void SwComponentsInit(HWND hWnd, SW *sw)
 
 	for (i = 0;i < LIST_NUM(sw->ComponentList);i++)
 	{
-		SW_COMPONENT *c = LIST_DATA(sw->ComponentList, i);
-
-		if (c->Detected)
+		if (i == 1) 
 		{
-			wchar_t tmp[MAX_SIZE];
+			SW_COMPONENT *c = LIST_DATA(sw->ComponentList, i);
 
-			UniFormat(tmp, sizeof(tmp), L" %s", c->Title);
-
-			LvInsertAdd(b, c->Icon, c, 1, tmp);
-
-			if (c->SystemModeOnly == false || MsIsAdmin())
+			if (c->Detected)
 			{
-				if (default_select == NULL)
+				wchar_t tmp[MAX_SIZE];
+
+				UniFormat(tmp, sizeof(tmp), L" %s", c->Title);
+
+				LvInsertAdd(b, c->Icon, c, 1, tmp);
+
+				if (c->SystemModeOnly == false || MsIsAdmin())
 				{
-					default_select = c;
+					if (default_select == NULL)
+					{
+						default_select = c;
+					}
 				}
 			}
 		}
+		
 	}
 
 	LvInsertEnd(b, hWnd, L_LIST);
@@ -5666,7 +6655,9 @@ UINT SwModeDlg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard
 				if (MsIsAdmin())
 				{
 					// Jump to the component list screen if the user has administrator privileges
-					return D_SW_COMPONENTS;
+					// Todo
+					// return D_SW_COMPONENTS;
+					return D_SW_EULA;
 				}
 				else
 				{
@@ -5677,8 +6668,10 @@ UINT SwModeDlg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wizard
 		}
 		else
 		{
+			// Todo
 			// Jump to the component list screen
-			return D_SW_COMPONENTS;
+			// return D_SW_COMPONENTS;
+			return D_SW_EULA;
 		}
 
 		break;
@@ -5784,8 +6777,11 @@ UINT SwWelcomeDlg(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam, WIZARD *wiz
 		}
 		else
 		{
+			// Todo
 			// Skip to the component list screen if the user has Admin privileges
-			return D_SW_COMPONENTS;
+			// return D_SW_COMPONENTS;
+			// Skip to Eula screen
+			return D_SW_EULA;
 		}
 		break;
 
@@ -6009,25 +7005,56 @@ void SwUiMain(SW *sw)
 	else
 	{
 		// Installation mode
-		UINT start_page = D_SW_WELCOME;
+		// UINT start_page = D_SW_WELCOME;
+		UINT start_page = D_SW_EULA;
+		// UINT start_page = D_SW_PERFORM;
 
-		if (sw->IsReExecForUac)
+		UINT x;
+
+		for (x = 0;x < LIST_NUM(sw->ComponentList);x++)
 		{
-			// In the case of this have been executed for UAC
-			if (MsIsAdmin())
+			if (x == 1) 
 			{
-				// Jump to component list if the user have system administrator privileges
-				start_page = D_SW_COMPONENTS;
-			}
-			else
-			{
-				// Jump to the setup mode selection screen when fail
-				// to get admin privileges even executed by enabling UAC
-				start_page = D_SW_MODE;
+				SW_COMPONENT *c = LIST_DATA(sw->ComponentList, x);
+
+				sw->CurrentComponent = c;
 			}
 		}
 
+		// if (sw->IsReExecForUac)
+		// {
+		// 	// In the case of this have been executed for UAC
+		// 	if (MsIsAdmin())
+		// 	{	
+		// 		// Todo
+		// 		// Jump to component list if the user have system administrator privileges
+		// 		// start_page = D_SW_COMPONENTS;
+
+		// 		// Skip the component page and install the default selection (VPN Client)
+		// 		UINT i;
+
+		// 		for (i = 0;i < LIST_NUM(sw->ComponentList);i++)
+		// 		{
+		// 			if (i == 1) 
+		// 			{
+		// 				SW_COMPONENT *c = LIST_DATA(sw->ComponentList, i);
+
+		// 				sw->CurrentComponent = c;
+		// 			}
+		// 		}
+
+		// 		start_page = D_SW_EULA;
+		// 	}
+		// 	else
+		// 	{
+		// 		// Jump to the setup mode selection screen when fail
+		// 		// to get admin privileges even executed by enabling UAC
+		// 		start_page = D_SW_MODE;
+		// 	}
+		// }
+
 		ShowWizard(NULL, w, start_page);
+		// SwInstallMain(sw, sw->CurrentComponent);
 
 		if (sw->Run)
 		{
@@ -6608,6 +7635,7 @@ UINT SWExecMain()
 
 	// Test!
 	//sw->WebMode = true;
+	// sw->EasyMode = true;
 
 	// Detect the installable components
 	SwDetectComponents(sw);

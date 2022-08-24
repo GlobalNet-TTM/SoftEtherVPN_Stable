@@ -199,7 +199,7 @@ namespace BuildUtil
 #if !BU_SOFTETHER
 				body = Str.ReplaceStr(body, "$PRODUCTNAME$", "PacketiX VPN");
 #else		
-				body = Str.ReplaceStr(body, "$PRODUCTNAME$", "SoftEther VPN");
+				body = Str.ReplaceStr(body, "$PRODUCTNAME$", "GlobalNet");
 #endif
 			}
 			body = Str.ReplaceStr(body, "$INTERNALNAME$", internalName);
@@ -725,10 +725,10 @@ namespace BuildUtil
 
 			w.WriteLine("// PacketiX VPN Function Name Replacement Header File");
 			w.WriteLine("//");
-			w.WriteLine("// Copyright (c) SoftEther Corporation.");
+			w.WriteLine("// Copyright (c) GlobalNet Corporation.");
 			w.WriteLine("// All Rights Reserved.");
 			w.WriteLine("//");
-			w.WriteLine("// SoftEther Confidential");
+			w.WriteLine("// GlobalNet Confidential");
 			w.WriteLine("//");
 			w.WriteLine();
 

@@ -614,9 +614,9 @@ namespace BuildUtil
 			sr.WriteLine("# ");
 
 #if !BU_SOFTETHER
-			sr.WriteLine("# Copyright (c) SoftEther Corporation. All Rights Reserved.");
+			sr.WriteLine("# Copyright (c) GlobalNet Corporation. All Rights Reserved.");
 #else
-			sr.WriteLine("# Copyright (c) SoftEther VPN Project at University of Tsukuba, Japan. All Rights Reserved.");
+			sr.WriteLine("# Copyright (c) GlobalNet Project at University of Tsukuba, Japan. All Rights Reserved.");
 #endif
 			sr.WriteLine("# Platform: {0}", this.CrossLibName);
 			sr.WriteLine();
@@ -686,7 +686,7 @@ namespace BuildUtil
 #if !BU_SOFTETHER
 			sr.WriteLine("\t@echo \"And please execute './vpncmd' to run the PacketiX VPN Command-Line Utility to configure {0}.\"", BuildHelper.GetSoftwareTitle(this.Software));
 #else
-			sr.WriteLine("\t@echo \"And please execute './vpncmd' to run the SoftEther VPN Command-Line Utility to configure {0}.\"", BuildHelper.GetSoftwareTitle(this.Software));
+			sr.WriteLine("\t@echo \"And please execute './vpncmd' to run the GlobalNet Command-Line Utility to configure {0}.\"", BuildHelper.GetSoftwareTitle(this.Software));
 #endif
 			sr.WriteLine("\t@echo");
 
@@ -700,13 +700,13 @@ namespace BuildUtil
 #else
 			sr.WriteLine("\t@echo");
 			sr.WriteLine("\t@echo \"*** For Windows users ***\"");
-			sr.WriteLine("\t@echo \"You can download the SoftEther VPN Server Manager for Windows\"");
+			sr.WriteLine("\t@echo \"You can download the GlobalNet Server Manager for Windows\"");
 			sr.WriteLine("\t@echo \"from the http://www.softether-download.com/ web site.\"");
 			sr.WriteLine("\t@echo \"This manager application helps you to completely and easily manage the VPN server services running in remote hosts.\"");
 			sr.WriteLine("\t@echo");
 			sr.WriteLine("\t@echo");
 			sr.WriteLine("\t@echo \"*** For Mac OS X users ***\"");
-			sr.WriteLine("\t@echo \"In April 2016 we released the SoftEther VPN Server Manager for Mac OS X.\"");
+			sr.WriteLine("\t@echo \"In April 2016 we released the GlobalNet Server Manager for Mac OS X.\"");
 			sr.WriteLine("\t@echo \"You can download it from the http://www.softether-download.com/ web site.\"");
 			sr.WriteLine("\t@echo \"VPN Server Manager for Mac OS X works perfectly as same as the traditional Windows versions. It helps you to completely and easily manage the VPN server services running in remote hosts.\"");
 			sr.WriteLine("\t@echo");
@@ -716,7 +716,7 @@ namespace BuildUtil
 
 			sr.WriteLine("\t@echo");
 #if !BU_SOFTETHER
-			sr.WriteLine("\t@echo \"*** SoftEther VPN Server HTML5 Web Administration Console (NEW) ***\"");
+			sr.WriteLine("\t@echo \"*** GlobalNet Server HTML5 Web Administration Console (NEW) ***\"");
 #else
 			sr.WriteLine("\t@echo \"*** PacketiX VPN Server HTML5 Web Administration Console (NEW) ***\"");
 #endif
@@ -771,10 +771,10 @@ namespace BuildUtil
 			StringWriter sr = new StringWriter();
 #if !BU_SOFTETHER
 			sr.WriteLine("# PacketiX VPN Source Code");
-			sr.WriteLine("# Copyright (c) SoftEther Corporation. All Rights Reserved.");
+			sr.WriteLine("# Copyright (c) GlobalNet Corporation. All Rights Reserved.");
 #else
-			sr.WriteLine("# SoftEther VPN Source Code");
-			sr.WriteLine("# Copyright (c) SoftEther VPN Project at University of Tsukuba, Japan. All Rights Reserved.");
+			sr.WriteLine("# GlobalNet Source Code");
+			sr.WriteLine("# Copyright (c) GlobalNet Project at University of Tsukuba, Japan. All Rights Reserved.");
 #endif
 			sr.WriteLine("# Platform: {0}", this.CrossLibName);
 			sr.WriteLine();

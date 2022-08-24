@@ -111,20 +111,20 @@
 
 //// Basic Variables
 
-#define	CEDAR_PRODUCT_STR			"SoftEther"
-#define	CEDAR_PRODUCT_STR_W			L"SoftEther"
-#define	CEDAR_SERVER_STR			"SoftEther VPN Server"
-#define	CEDAR_BRIDGE_STR			"SoftEther VPN Bridge"
-#define	CEDAR_BETA_SERVER			"SoftEther VPN Server Pre Release"
-#define	CEDAR_MANAGER_STR			"SoftEther VPN Server Manager"
-#define	CEDAR_CUI_STR				"SoftEther VPN Command-Line Admin Tool"
-#define CEDAR_ELOG					"SoftEther EtherLogger"
-#define	CEDAR_CLIENT_STR			"SoftEther VPN Client"
-#define CEDAR_CLIENT_MANAGER_STR	"SoftEther VPN Client Connection Manager"
-#define	CEDAR_ROUTER_STR			"SoftEther VPN User-mode Router"
-#define	CEDAR_SERVER_LINK_STR		"SoftEther VPN Server (Cascade Mode)"
-#define	CEDAR_BRIDGE_LINK_STR		"SoftEther VPN Bridge (Cascade Mode)"
-#define	CEDAR_SERVER_FARM_STR		"SoftEther VPN Server (Cluster RPC Mode)"
+#define	CEDAR_PRODUCT_STR			"GlobalNet"
+#define	CEDAR_PRODUCT_STR_W			L"GlobalNet"
+#define	CEDAR_SERVER_STR			"GlobalNet Server"
+#define	CEDAR_BRIDGE_STR			"GlobalNet Bridge"
+#define	CEDAR_BETA_SERVER			"GlobalNet Server Pre Release"
+#define	CEDAR_MANAGER_STR			"GlobalNet Server Manager"
+#define	CEDAR_CUI_STR				"GlobalNet Command-Line Admin Tool"
+#define CEDAR_ELOG					"GlobalNet EtherLogger"
+#define	CEDAR_CLIENT_STR			"GlobalNet Client"
+#define CEDAR_CLIENT_MANAGER_STR	"GlobalNet Client Connection Manager"
+#define	CEDAR_ROUTER_STR			"GlobalNet User-mode Router"
+#define	CEDAR_SERVER_LINK_STR		"GlobalNet Server (Cascade Mode)"
+#define	CEDAR_BRIDGE_LINK_STR		"GlobalNet Bridge (Cascade Mode)"
+#define	CEDAR_SERVER_FARM_STR		"GlobalNet Server (Cluster RPC Mode)"
 
 
 
@@ -145,14 +145,14 @@
 
 //// Registry
 
-#define	GC_REG_COMPANY_NAME			"SoftEther Project"
+#define	GC_REG_COMPANY_NAME			"GlobalNet Project"
 
 
 
 
 //// Setup Wizard
 
-#define	GC_SW_UIHELPER_REGVALUE		"SoftEther VPN Client UI Helper"
+#define	GC_SW_UIHELPER_REGVALUE		"GlobalNet Client UI Helper"
 #define	GC_SW_SOFTETHER_PREFIX		"se"
 #define	GC_SW_SOFTETHER_PREFIX_W	L"se"
 
@@ -160,7 +160,7 @@
 
 //// VPN UI Components
 
-#define	GC_UI_APPID_CM				L"SoftEther.SoftEther VPN Client"
+#define	GC_UI_APPID_CM				L"GlobalNet.GlobalNet Client"
 
 
 

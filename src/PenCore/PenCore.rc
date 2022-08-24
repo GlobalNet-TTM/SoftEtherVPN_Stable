@@ -13,7 +13,7 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
-// ì˙ñ{åÍ resources
+// ÔøΩÔøΩÔøΩ{ÔøΩÔøΩ resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
 #ifdef _WIN32
@@ -4842,12 +4842,12 @@ END
 //
 
 BIN_WINPCAP             BIN                     "Dummy.bin"
-#endif    // ì˙ñ{åÍ resources
+#endif    // ÔøΩÔøΩÔøΩ{ÔøΩÔøΩ resources
 /////////////////////////////////////////////////////////////////////////////
 
 
 /////////////////////////////////////////////////////////////////////////////
-// âpåÍ (ïƒçë) resources
+// ÔøΩpÔøΩÔøΩ (ÔøΩƒçÔøΩ) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
 #ifdef _WIN32
@@ -4889,13 +4889,13 @@ BMP_IX2015              BITMAP                  "IX2015.bmp"
 BMP_OPENVPN             BITMAP                  "OpenVPN.bmp"
 BMP_SSTP                BITMAP                  "SSTP.bmp"
 BMP_SPECIALLISTENER     BITMAP                  "SpecialListener.bmp"
-BMP_SELOGO49x49         BITMAP                  "SELOGO49x49.bmp"
+BMP_SELOGO49x49         PNG                     "SELOGO49x49.png"
 BMP_UT                  BITMAP                  "BMP_UT.bmp"
 BMP_SW_LANG_1           BITMAP                  "SW_LANG_1.bmp"
 BMP_SW_LANG_2           BITMAP                  "SW_LANG_2.bmp"
 BMP_SW_LANG_3           BITMAP                  "SW_LANG_3.bmp"
-BMP_VPNSERVER_FIGURE    BITMAP                  "VPNServerFigure.bmp"
-BMP_ABOUTBOX            BITMAP                  "AboutBox.bmp"
+BMP_VPNSERVER_FIGURE    PNG                     "VPNServerFigure.png"
+BMP_ABOUTBOX            PNG                     "AboutBox.png"
 BMP_UPDATE              BITMAP                  "Update.bmp"
 BMP_IBARAKI             BITMAP                  "Ibaraki.bmp"
 BMP_WINPC               BITMAP                  "WinPC.bmp"
@@ -4908,7 +4908,7 @@ BMP_ZURUKKO             BITMAP                  "Zurukko.bmp"
 BMP_VPNGATEEN           BITMAP                  "VPNGateEN.bmp"
 BMP_VPNGATEJA           BITMAP                  "VPNGateJA.bmp"
 BMP_UNIVTSUKUBA         BITMAP                  "UnivTsukuba.bmp"
-#endif    // âpåÍ (ïƒçë) resources
+#endif    // ÔøΩpÔøΩÔøΩ (ÔøΩƒçÔøΩ) resources
 /////////////////////////////////////////////////////////////////////////////
 
 

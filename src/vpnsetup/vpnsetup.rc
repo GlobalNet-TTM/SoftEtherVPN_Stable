@@ -82,12 +82,12 @@ END
 
 10001 DIALOGEX 0, 0, 261, 75
 STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "SoftEther Installer"
+CAPTION "GlobalNet Installer"
 FONT 9, "MS PGothic", 400, 0, 0x80
 BEGIN
     ICON            IDI_ICON10,IDC_STATIC,7,7,20,20,WS_TABSTOP
-    LTEXT           "ƒCƒ“ƒXƒg[ƒ‹‚Ì€”õ’†...",IDC_STATIC,30,7,189,20
-    DEFPUSHBUTTON   "ƒLƒƒƒ“ƒZƒ‹",IDCANCEL,195,52,59,16
+    LTEXT           "ï¿½Cï¿½ï¿½ï¿½Xï¿½gï¿½[ï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½...",IDC_STATIC,30,7,189,20
+    DEFPUSHBUTTON   "ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½ï¿½",IDCANCEL,195,52,59,16
 END
 
 #endif    // Japanese resources
@@ -149,11 +149,11 @@ END
 
 10002 DIALOGEX 0, 0, 261, 75
 STYLE DS_SETFONT | DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION
-CAPTION "SoftEther Installer"
+CAPTION "GlobalNet Installer"
 FONT 8, "Arial", 400, 0, 0x0
 BEGIN
     ICON            IDI_ICON10,IDC_STATIC,7,7,20,20,WS_TABSTOP
-    LTEXT           "Preparing to install...",IDC_STATIC,33,7,189,20
+    LTEXT           "Preparing...",IDC_STATIC,33,7,189,20
     DEFPUSHBUTTON   "Cancel",IDCANCEL,195,54,59,14
 END
 

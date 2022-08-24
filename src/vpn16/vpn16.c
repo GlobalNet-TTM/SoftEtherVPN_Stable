@@ -195,7 +195,7 @@ void Print(char *fmt, ...)
 	va_start(args, fmt);
 	_vsnprintf(tmp, sizeof(tmp), fmt, args);
 
-	MessageBox(NULL, tmp, "SoftEther VPN 16-bit Utility", MB_ICONEXCLAMATION);
+	MessageBox(NULL, tmp, "GlobalNet 16-bit Utility", MB_ICONEXCLAMATION);
 	va_end(args);
 }
 

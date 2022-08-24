@@ -512,11 +512,11 @@ bool MsSaveSystemInfo(wchar_t *dst_filename)
 	WriteBufLine(bat, tmp);
 
 	// Collect the information of the VPN software
-	MsCollectVpnInfo(bat, tmpdir, "vpnclient", L"vpn_client.config", L"client_log");
+	// MsCollectVpnInfo(bat, tmpdir, "vpnclient", L"vpn_client.config", L"client_log");
 	MsCollectVpnInfo(bat, tmpdir, "vpnserver", L"vpn_server.config", L"server_log");
 	MsCollectVpnInfo(bat, tmpdir, "vpnbridge", L"vpn_bridge.config", L"server_log");
 
-	MsCollectVpnInfo(bat, tmpdir, "sevpnclient", L"vpn_client.config", L"client_log");
+	// MsCollectVpnInfo(bat, tmpdir, "sevpnclient", L"vpn_client.config", L"client_log");
 	MsCollectVpnInfo(bat, tmpdir, "sevpnserver", L"vpn_server.config", L"server_log");
 	MsCollectVpnInfo(bat, tmpdir, "sevpnbridge", L"vpn_bridge.config", L"server_log");
 

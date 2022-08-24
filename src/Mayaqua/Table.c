@@ -169,7 +169,7 @@ LABEL_FATAL_ERROR:
 	current_os_lang.LangList = current_os_lang.LcidList = NULL;
 
 	// Read the corresponding string table
-	Format(table_name, sizeof(table_name), "|strtable_%s.stb", current_lang.Name);
+	Format(table_name, sizeof(table_name), "|strtable_en.stb", current_lang.Name);
 	if (LoadTable(table_name) == false)
 	{
 		goto LABEL_FATAL_ERROR;

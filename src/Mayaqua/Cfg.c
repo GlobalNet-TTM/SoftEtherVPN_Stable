@@ -162,11 +162,11 @@ void BackupCfgWEx(CFG_RW *rw, FOLDER *f, wchar_t *original, UINT revision_number
 	}
 
 	// Create the directory
-	MakeDirW(dirname);
+	// MakeDirW(dirname);
 
 	// Save the file
-	UniFormat(fullpath, sizeof(fullpath), L"%s/%s", dirname, filename);
-	CfgSaveW(f, fullpath);
+	// UniFormat(fullpath, sizeof(fullpath), L"%s/%s", dirname, filename);
+	// CfgSaveW(f, fullpath);
 }
 
 // Close the configuration file R/W

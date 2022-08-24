@@ -145,7 +145,7 @@
 			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}"
 			>
 			<File
-				RelativePath=".\AboutBox.bmp"
+				RelativePath=".\AboutBox.png"
 				>
 			</File>
 			<File
@@ -445,7 +445,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\SELOGO49x49.bmp"
+				RelativePath=".\SELOGO49x49.png"
 				>
 			</File>
 			<File
@@ -629,7 +629,7 @@
 				>
 			</File>
 			<File
-				RelativePath=".\VPNServerFigure.bmp"
+				RelativePath=".\VPNServerFigure.png"
 				>
 			</File>
 			<File
