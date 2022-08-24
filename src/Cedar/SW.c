@@ -7003,7 +7003,7 @@ void SwUiMain(SW *sw)
 		}
 	}
 	else
-	{
+	{ 
 		// Installation mode
 		// UINT start_page = D_SW_WELCOME;
 		UINT start_page = D_SW_EULA;
